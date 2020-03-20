@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+var man={
+	name:"Bosn",
+	weibo:"@Bosn",
+	get age(){
+		return new Date().getFullYear()-2000;
+	},
+	set age(val){
+		console.log('Age can\'t be set to'+val);
+	}
+}
+console.log(man.age);
+man.age=100;
+console.log(man.age);
+
+
+
+
+
+
+
+
+var man={
+	weibo:"@Bosn",
+	$age:null,
+	get age(){
+		if(this.$age==undefined){
+			return new Date().getFullYear()-2000;
+		}else{
+			return this.$age;
+		}
+	},
+	set age(val){
+		val=+val;
+		if(!isNaN(val) && val>0 &&val<150){
+			this.$age=+val;
+		}else{
+			throw new Error('Incorrect val='+val);
+		}
+	}
+}
+console.log(man.age);
+man.age=100;
+console.log(man.age);
+//man.age='abc';// Error: Incorrect val=NaN
+
+
+
+
+
+
+//get set  原型链 相结合 案例一
+function foo(){};
+Object.defineProperty(foo.prototype,'z',{get:function(){return 1;}});
+var obj=new foo();
+console.log(obj.z);//1
+obj.z=10;//如果在没有使用get的情况下  这种赋值是成功的 只不过这个值在当前对象上面  不会影响到  原型   但是 在这里  使用了 get方法 所以 这里的赋值是不成功的 因为再给z赋值的时候首先查找的是 该对象上面有没有 z这个属性  如果没有向上查找 如果上面有get/set方法  他是会执行get/set方法的 而不是会给当前对象添加属性来实现
+console.log(obj.z);//1
+//解决方法
+Object.defineProperty(obj ,'z',{value:100,configurable:true});
+console.log(obj.z);
+delete obj.z;//因为这里的configurable是ture 所以可以进行删除
+console.log(obj.z);
+
+//案例二
+//Object.create(proto,[propertiesObject]);
+//1.方法创建一个新对象，使用现有的对象来提供新创建的对象的proto。
+//2.参数:
+/*
+	proto : 必须。表示新建对象的原型对象，即该参数会被赋值到目标对象(即新对象，或说是最后返回的对象)的原型上。该参数可以是null， 对象， 函数的prototype属性 （创建空的对象时需传null , 否则会抛出TypeError异常）。
+	propertiesObject : 可选。 添加到新创建对象的可枚举属性（即其自身的属性，而不是原型链上的枚举属性）对象的属性描述符以及相应的属性名称。这些属性对应Object.defineProperties()的第二个参数。	
+*/
+var o={};
+Object.defineProperty(o,'x',{value:1});//writable=false configurable=false 不设置 默认是false
+var obj=Object.create(o);
+console.log(obj.x);
+obj.x=200;//因为 他的writable=false 所以 不能进行修改
+console.log(obj.x);//still 1  can't change it
+
+Object.defineProperty(obj,'x',{writable:true,configurable:true,value:100});
+console.log(obj.x);
+obj.x=500;
+console.log(obj.x);
+</script>

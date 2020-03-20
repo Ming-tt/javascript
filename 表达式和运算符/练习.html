@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+var obj={};
+Object.defineProperty(obj,'x',{
+	configurable:false,
+	value:1
+});
+delete obj.x;//false
+obj.x; //1
+console.log(obj);
+
+
+
+//1-运算符 in 用于判断对象里面有没有加某个属性
+window.x=1;
+console.log('x' in window);
+
+//2-instanceof 判断对象的类型  基于原型链
+console.log([1,2] instanceof Array);
+
+//3-运算符 new
+function Foo(){}
+Foo.prototype.x=1;
+var obj=new Foo();
+obj.x;//1;
+obj.hasOwnProperty('x');//false;  用这个方法来判断  这个属性是这个对象上面的  还是这个对象的原型链上面的
+obj.__proto__.hasOwnProperty('x');//true   通过__proto__可以拿到对象的一个原型  这个x是属性原型上面的属性
+
+//4-this运算符
+var obj={
+	func: function(){return this}
+};
+obj.func();//obj
+
+
+//5-运算符 void 不管后面是什么  返回的都是undefined
+console.log(void 0);
+
+//6-运算符的优先级
+
+</script>

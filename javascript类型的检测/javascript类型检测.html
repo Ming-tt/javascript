@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+//1-typeof 用于判断 number boolean string object function undefined symbol等这7种类型的判断 但是在判断object类型的时候不能细致的具体到是哪一种object  遇到null会失效
+var str="123456";
+var num=1346;
+console.log(typeof(null),typeof(NaN),typeof(undefined),typeof(str),typeof(num),typeof(function(){}),typeof([1,2]),typeof(true));
+//2-instanceof 基于原型链的操作符   主要用于判断对象  左边的操作数 是对象 如果不是对象 则会返回false	右边的操作数 必须是一个函数对象 函数构造器 如果不是 就会抛出一个 type error异常的错误
+//注意  不同的Windows和iframe间的对象类型检测不能使用instanceof   
+console.log( {"你好":22} instanceof Object);//true
+console.log([1,2] instanceof  Array);//true
+console.log(new Object() instanceof Object);
+
+
+
+
+function Person(){};
+function Student(){};
+Student.prototype=new Person();
+Student.prototype.constructor=Student;
+var bosn=new Student();
+console.log(bosn instanceof Student);//true
+var one=new Person();
+console.log(one instanceof Person);//true
+console.log(one instanceof Student);//false
+console.log(bosn instanceof Person);//true
+
+
+
+
+
+//3-使用Object.prototype.toString函数用于判断object类型 细致区分是object中的哪一个
+//注意 在IE6/7/8里面使用Object.prototype.toString.apply(null) 返回的还是 [object Object]; 遇到null和undefined失效
+//Object.prototype.toString.apply([])==="[object Array]";
+console.log(Object.prototype.toString.apply([]));//[object Array]
+console.log(Object.prototype.toString.apply(function(){}));//[object Function] 
+console.log(Object.prototype.toString.apply(null));//[object Null];
+console.log(Object.prototype.toString.apply(undefined));
+
+</script>

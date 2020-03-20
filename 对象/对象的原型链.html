@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>原型链</title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+function foo(){};
+foo.prototype.z=3;
+
+var obj=new foo();
+obj.x=1;
+obj.y=2;
+console.log(obj.x, obj.y, obj.z);
+console.log(typeof obj.toString);
+console.log('z' in obj);//in 这个方法 会去原型链上面找z这个属性   如果原型链上面没有 才返回false 
+console.log(obj.hasOwnProperty('z'));//false  这就说明 z这个属性不是obj上面的 而是obj上面的原型链上的
+
+obj.z=5;
+console.log(obj.hasOwnProperty('z'));//true
+console.log(foo.prototype.z);//still 3  由此可见给对象上面的某个属性赋值  不会影响到原型链上面的属性的值
+console.log(obj.z);//5
+
+
+obj.z=undefined;
+console.log(obj.z);// 对象上面的属性 如果是undefined可能有两种可能 一种是 这个属性被赋值为undefined  另一种可能是这个对象以及他的原型链上面没有这个属性 返回的undefined
+
+
+//如果想要再次拿到原型链上面的改属性的值  需要删除对象上面的属性  
+delete obj.z;//true delete删除只会删除对象上面的属性 不会影响到原型链
+console.log(obj.z);//3
+
+
+
+
+//Object.create
+var obj=Object.create({x:1});
+console.log(obj.x);
+console.log(typeof obj.toString);//function
+obj.hasOwnProperty('x');//false
+
+var obj=Object.create(null);//null  
+obj.toString//undefined; null这个对象比不存在任何方法  所以返回undefined
+</script>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+var person={};
+Object.defineProperty(person,'name',{
+	configurable:false,
+	writable:false,
+	enumerable:true,
+	value:"Bosn Ma"
+});
+console.log(person.name);//Bosn Ma
+person.name=1;// 因为  writable 为false  所以不能修改
+console.log(person.name);//still Bosn Ma
+delete person.name;//false  因为configurable:false  所以不能删除
+
+
+
+
+Object.defineProperty(person,'type',{
+	configurable:true,
+	writable:true,
+	enumerable:false,
+	value:'Object'
+})
+console.log(Object.keys(person));//['name'] 去获取对象上面所有的key 因为type属性的enumerable的值为false 所以 不支持(枚举)遍历  返回的是person的name属性
+
+
+Object.defineProperties(person,{
+	title:{value:'fe',enumerable:true},
+	corp:{value:"Bobt",enumerable:true},
+	salary:{value:50000,enumerable:true,writable:true}
+});
+
+
+Object.getOwnPropertyDescriptor(person,'salary');//使用该方法拿到属性上面一些标签的情况
+//Object{value:50000,writable:true,enumerable:true,configurable:false}
+Object.getOwnPropertyDescriptor(person,'corp');
+//Object{value:Bobt,writable:false,enumerable:true,configurable:false}
+
+
+
+/*
+				configurable:true    configurable:true    configurable:false    configurable:true
+				writable:true        writable:true		  writable:true			writable:false
+
+
+修改属性的值	   √                    √						√						×
+									(重新设置value进行修改)	
+
+
+
+通过属性复制 		√					×					 	√	 					×
+修改属性的值
+
+
+
+delete该属性		√					√						×						×
+返回true
+
+
+
+
+修改getter/setter	√ 					√						×						×
+方法
+
+
+
+修改属性标签(除了
+writable从true修改为 √ 					√ 						×						×
+false总是允许)
+
+
+
+ */
+</script>

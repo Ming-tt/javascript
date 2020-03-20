@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+//因为在javascript里面 使用typeof来判断数据类型 ,只能区分基本类型,{number,string,undefined,boolean,object,funcgion ,symbol} 但是对于数组,null,对象来说,使用typeof都会统一返回'object'
+
+//在javascript中 通过使用Object.prototype.toString.call()方法进行对比
+
+
+
+//toString()方法和Object.prototype.toString.call()方法对比
+
+
+var arr=[1,2];
+//直接对一个数组调用toString();
+arr.toString();//'1,2'
+//通过call指定arr数组为Object.prototype对象中的toString方法的上下文
+Object.prototype.toString.call(arr);//[object Array];
+
+
+
+
+
+//为什么toString会有不同的作用呢
+
+var arr=[1,2,3];//undefined
+Object.prototype.toString.call(arr);//[object Array]
+Array.prototype.toString.call(arr);//"1,2,3"
+
+//其实只有Object.prototype上面的toString才能用来进行复杂数据类型的判断
+
+
+/*
+原型链的简单的概念
+我们都知道js中的对象都继承自Object,所以当我们在某个对象上调用一个方法时,会现在该对象上进行查找,如果没有找到则会进入对象的原型(也就是.prototype)进行查找,如果没有找到,同样的也会进入对象原型的原型进行查找,直到找到或者进入原型链的顶端Object.prototype才会停止
+所以,当我们使用arr.toString()时,不能进行复杂数据类型的判断,是因为它调用的是Array.prototype.toString,虽然Array也继承自Object.prototype.toString.
+*/
+
+//在javascript中一切都是对象,任何都不例外,对所有的值类型应用Object.prototype.toString.call()方法结果如下:
+console.log(Object.prototype.toString.call(123));    //[object Number]
+console.log(Object.prototype.toString.call('123'));    //[object String]
+console.log(Object.prototype.toString.call(undefined));    //[object Undefined]
+console.log(Object.prototype.toString.call(true));    //[object Boolean]
+console.log(Object.prototype.toString.call({}));    //[object Object]
+console.log(Object.prototype.toString.call([]));    //[object Array]
+console.log(Object.prototype.toString.call(function(){}));    //[object Function]
+console.log(Object.prototype.toString.call(null));    //[[object Null]]
+</script>

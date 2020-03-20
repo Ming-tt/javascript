@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+//1-对象的属性读写
+function foo(){}
+foo.prototype.z=4;
+
+var obj=new foo();
+obj.x=1;
+obj.y=2;
+console.log(obj.x,obj["y"]);
+for(var i in obj){
+	console.log(obj[i]);
+}
+//在使用for in 循环遍历的时候 会将原型链上面的属性  一起遍历出来
+
+
+
+//2-读写异常
+var obj={x:1};
+obj.y//undefined
+//var yz=obj.y.z;//Uncaught TypeError: Cannot read property 'z' of undefined 
+//obj.y.z=2;// Uncaught TypeError: Cannot set property 'z' of undefined 
+
+var yz;
+if(obj.y){
+	yz=obj.y.z;
+}
+var yz=obj&&obj.y&&obj.y.z;
+console.log(yz);//undefined
+
+
+
+
+//3-属性的删除
+var person={age:28,title:'fe'};
+delete person.age;//true;
+delete person['title'];//true
+person.age;//undefined;
+delete person.age;//true   因为不存在age属性了  所以还是会返回true  并不表示操作生效了 而是 该对象上没有这个属性了
+console.log(delete Object.prototype);//false  这个属性不允许进行删除
+var descriptor=Object.getOwnPropertyDescriptor(obj,'prototype');//此方式是获取一个属性中的所有标签 第一个参数是 对象  第二个参数是 属性
+
+
+var gobalVal=1;
+console.log(delete gobalVal);//全局变量不能被删除
+(function (){
+	var localVal=1;
+	return delete localVal;
+}());//false   局部变量也不能被删除
+
+function fd(){};
+delete fd;//函数也不能被删除
+
+
+
+(function(){
+	function fd(){};
+	return delete fd;
+}());//局部作用域的函数  也不能被删除
+
+ohNo=1;
+window.ohNo;
+delete ohNo;//隐式创建的一个全局变量  可以被删除  但是不推荐使用
+
+
+
+//属性检测
+var cat=new Object;
+cat.legs=4;
+cat.name="Kitty";
+'legs' in cat;//true;
+'abc'  in cat;//false;
+'toString' in cat;//true , inherited property;
+console.log('toString' in cat);	
+cat.hasOwnProperty('legs');//true
+cat.hasOwnProperty('toString');//false
+cat.propertyIsEnumerable('legs');//true   propertyIsEnumerable检测对象是否可枚举
+cat.propertyIsEnumerable('toString');//false
+
+
+
+
+
+//属性的枚举
+var  o={x:1,y:2,z:3};
+'toString'in o;//true;
+o.propertyIsEnumerable('toString');//false
+var key;
+for(key in o){
+	console.log(key);//x,y,z
+}
+
+var obj=Object.create(o);
+obj.a=4;
+var key;
+for(key in  obj){
+	console.log(key);//a,x,y,z
+}
+
+
+for(key in obj){
+	if(obj.hasOwnProperty(key)){
+		console.log(key);//a
+	}
+}
+</script>

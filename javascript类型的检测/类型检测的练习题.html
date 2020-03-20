@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>类型检测</title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+/*
+	编写函数arraysSimilar,实现判断传入的两个数组是否相似具体要求如下:
+		1-数组中的成员类型相同,顺序可以不同。例如[1,true]和[false,3];是相似的
+		2-数组的长度要一致
+		3-类型的判断范围,需要区分:String,Boolean,Number,undefined,null,函数,日期,window;
+*/
+function type(a){
+	if(a==null){
+		return '[object Null]';
+	}else if(a==undefined){
+		return '[object Function]';
+	}else{
+		return Object.prototype.toString.apply(a);
+	}
+}
+function arraySimilar(arr1,arr2){
+	if(!Array.isArray(arr1) || !Array.isArray(arr2) || arr1.length !=arr2.length){
+		console.log(2);
+		return false;
+	}
+	var arr3=[];
+	var arr4=[];
+	for(var i in arr1){
+		arr3.push(type(arr1[i]));
+		arr4.push(type(arr2[i]));
+	}
+	if(arr3.sort().toString()==arr4.sort().toString()){
+		console.log(1);
+		return true;
+
+	}else{
+		console.log(2);
+		return false;
+	}
+}
+</script>

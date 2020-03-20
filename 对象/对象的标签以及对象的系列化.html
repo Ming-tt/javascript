@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+var toString=Object.prototype.toString;
+function getType(o){return toString.call(o).slice(8,-1)};
+console.log(toString.call(null));
+console.log(getType(null));
+console.log(getType(undefined));
+console.log(getType(1));
+console.log(getType(new Number(1)));
+console.log(toString.call(1));
+</script>

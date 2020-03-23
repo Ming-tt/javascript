@@ -10,11 +10,69 @@
 </html>
 <script>
 var toString=Object.prototype.toString;
-function getType(o){return toString.call(o).slice(8,-1)};
-console.log(toString.call(null));
-console.log(getType(null));
-console.log(getType(undefined));
-console.log(getType(1));
-console.log(getType(new Number(1)));
-console.log(toString.call(1));
+function getType(o){return toString.call(o).slice(8,-1)};//slice (8,-1)是为了去掉[object] 看起来更直观
+console.log(toString.call(null));//[object Null]
+console.log(getType(null));//Null
+console.log(getType(undefined));//Undefined
+console.log(getType(1));//Number
+console.log(getType(new Number(1)));//Number
+
+
+
+
+
+
+var obj={x:1,y:2}
+Object.isExtensible(obj);//isExtensible  方法表示对象是否可以扩展 看看对象是否可以添加其他的新的属性
+Object.preventExtensions(obj);//通过 preventExtensions 方法 不让obj这个对象扩展 意思就是不让对象添加新的属性
+Object.isExtensible(obj);//false
+obj.z=1;
+console.log(obj.z);
+Object.getOwnPropertyDescriptor(obj,'x');
+//此方法是检查 对象上面的属性标签是否会发生变化
+
+
+
+
+Object.seal(obj);//在preventExtensions的基础上使用该方法 是对象不能删除属性
+Object.getOwnPropertyDescriptor(obj,'x');
+//Object{value:1,writable:true,enumerable:true,configurable:false}
+Object.isSealed(obj)//true
+
+
+
+Object.freeze(obj);//冻结方法   是对象中的属性不能进行修改
+Object.getOwnPropertyDescriptor(obj,'x');
+//Object{value:1,writable:false,enumerable:true,configurable:false}
+Object.isFrozen(obj);//true  判断当前的对象是否被冻结
+
+
+//这里面提到 的方法只是针对于 当前对象的   并不影响原型链  要想使原型链也冻结
+
+console.log(Object.getPrototypeOf(obj));//使用这个方法 进行原型链的查找  去遍历他的原型链   通过循环一层一层的取调用这些方法  是整个原型链冻结
+
+
+
+
+
+
+
+
+
+
+
+
+//序列化  其他对象方法
+var obj={x:1,y:true,z:[1,2,3],nullV:null};
+console.log(JSON.stringify(obj));
+
+
+obj={val:undefined,a:NaN,b:Infinity,c:new Date()};
+console.log(JSON.stringify(obj));
+/*
+	1-如果  有的值是undefined的话  那么它将不会出现在结果当中  如果对象中有这个属性 但是值是undefined  和没有这个属性 是undefined 是不一样的 通过 hasOwnProperty
+	2-如果值是NaN 或者是Infinity 的时候  输出结果时  他们会变成null
+*/
+
+obj=JSON.parse('{"x":1}');
 </script>

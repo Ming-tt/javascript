@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>数组的操作</title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+//数组的创建 
+var arr=new Array();//里数字是多少面可以传两种参数    第一种是数字  数字是多少 该数组的长度就是多少  第二种就是传多个参数  
+var arrLength=new Array(20);
+var arrCount=new Array(1,true,undefined,null,"xx");
+console.log(arrLength.length,arrCount);
+
+
+//数组是动态的  不需要指定大小   增删改查
+var arr=[1,2];
+arr.push(3);
+arr[arr.length]=4;
+arr.unshift(0);
+console.log(arr);
+//通过delete方法删除数组中的数据   实际上是将数据变为了 undefined  还是会占据他自己的那个位置 使用in操作符来判断这个数据是否存在于这个数组中
+delete arr[2];
+2 in arr;//false
+
+
+
+arr.length-=1;//删除后面的
+arr.pop();//删除数组最后面的
+arr.shift();//删除数组最前面的
+
+
+//数组的迭代   for in 循环不会保证顺序
+var i=null,n=5;
+var arr=[1,2,3,4];
+for(i=0;i<n;i++){
+	console.log(arr[i])//1,2,3,4,undefined
+}
+for(i in arr){
+	console.log(arr[i])//1,2,3,4
+}
+
+//数组也是对象   他也会有原型   使用Array.prototype方法添加一个属性   在使用for in 循环 同样会把新增的这个 x属性的值打印出来
+Array.prototype.x='inherited';
+for(i in arr){
+	console.log(arr[i])//1,2,3,4,inherited
+}
+
+//所以   在使用for  in 循环的时候  使用 hasOwnProperty方法 将原型链里面的一些属性过滤出来  不在页面上进行打印 
+for(i in arr){
+	if(arr.hasOwnProperty(i)){
+		console.log(arr[i]);//1,2,3,4
+	}
+}
+</script>

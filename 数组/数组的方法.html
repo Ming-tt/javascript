@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>
+<script>
+//1-join方法
+function repeatString(str,n){
+    return new Array(n+1).join(str);
+}
+console.log(repeatString('a',3));
+console.log(repeatString('Hi',5));
+
+//2-reverse方法 原数组也会被修改
+var arr=[1,2,3];
+arr.reverse();//[3,2,1]
+arr//[3,2,1]
+
+//3-sort方法 排序  原数组会被修改
+var arr=[{age:25},{age:66},{age:88}];
+arr.sort(function(a,b){
+    return a.age-b.age;
+})
+arr.forEach(function(item){
+    console.log('age',item.age);
+})
+
+//4-concat  数组的合并  原数组不会被修改
+var arr=[1,2,3];
+arr.concat([10,11],13);//[1,2,3,10,11,13]
+
+//5-slice方法 截取    原数组不会发生修改
+var arr=[1,2,3,4,5,6];
+console.log(arr.slice(1,3))//[2,3]
+console.log(arr.slice(1));//[2,3,4,5,6]
+console.log(arr.slice(1,-1));//[2,3,4,5]
+
+
+//6-splice方法  对数组进行拼接 删除  原数组会发生改变
+var arr=[1,2,3,4];
+arr.splice(2);//return [3,4,5]
+arr//[1,2]
+
+
+arr=[1,2,3,4,5]
+arr.splice(2,2);//return [3,4]
+arr//[1,2,5]
+
+
+arr=[1,2,3,4,5]
+arr.splice(1,1,'a','b');//return [2]
+arr;//[1,'a','b',3,4,5]
+
+//7-forEach  数组的遍历
+var arr=[1,2,3,4,5];
+arr.forEach(function(x,index,a){
+    console.log(x+'|'+index+"|"+(a===arr));
+});
+
+//8-map  数组的映射 不会对原数组进行修改
+var arr=[1,2,3];
+arr.map(function(x){
+    return x+10;
+});
+
+
+//9-filter  数组的过滤  不会对原数组进行修改
+
+var arr=[1,2,3,4,5,6]
+arr.filter(function(x,index){
+    return index%3===0||x>=8;
+});//return [1,4,7,8,9,10]
+
+//10-every  or  some   数组的判断
+//every 是数组中的每一个元素都要符合条件   some是其中一个元素符合条件就可以
+var arr=[1,2,3,4,5];
+arr.every(function(x){
+    return x<10;
+});//true
+
+
+
+//11-reduce(把数组中的元素进行两两操作)      &reduceRight 参数从右=>左  原数组均不会被修改
+
+var arr=[1,2,3];
+var sum=arr.reduce(function(x,y){
+    return x+y;
+},0);//6
+//第二个参数可传可不传  如果传了  x=>0  y=>arr[0]  不传  x=>arr[0]  y=>arr[1]
+
+arr=[3,6,9];
+var max=arr.reduce(function(x,y){
+    console.log(x+"|"+y);
+    return x>y?x:y;
+})
+
+console.log(max);//9 
+
+//12-indexOf(返回元素的索引)  lastIndexOf(从后往前找)  参数是负数  是从右向左找
+
+var arr=[1,2,3,2,1];
+console.log(arr.indexOf(2));//1
+console.log(arr.indexOf(99));//-1
+console.log(arr.indexOf(1,1));//4
+console.log(arr.lastIndexOf(2,-2));//1
+
+
+//Array.isArray([]);  判断是否是数组
+var obj={x:1}
+console.log(Array.isArray(obj));
+
+
+
+var str="hello world";
+console.log(Array.prototype.join.call(str,'_'));//通过 Array.prototype.join这个方法可以使字符串进行拼接
+</script>

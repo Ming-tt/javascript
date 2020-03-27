@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>
+<script>
+var obj={name:'obj'}
+console.log(obj)
+console.log(obj.toString());
+
+
+//1--this的指向
+//this永远指向最后调用他的那个对象
+//例1
+var name='windowName';
+function a(){
+	var name=10;
+	console.log(this.name);//windowName
+	//为什么会打印windowName呢  因为a()这函数的前面没有调用的对象 所以他的调用的对象默认就是window全局对象 也就是window.a();   注意:在这里我们并没有使用严格模式  如果使用严格模式 全局对象就是undefined就会报错
+	console.log('inner'+this);//inner : window		
+}
+a();
+console.log('outer'+this)//outer :window
+
+
+//例2
+var name='windowName';
+var a={
+	name:"tt",
+	fn:function(){
+		console.log(this.name); //tt
+		//在这里 函数fn()的调用对象是a  所以打印的值就是a中的name
+	}
+}
+a.fn();	
+//例3
+var name='windowName';
+var a={
+	name:"tt",
+	fn:function(){
+		console.log(this.name); //tt
+		//为什么这里打印的还是tt而不是windowName呢  原因是"this永远指向最后调用它的那个对象"最后调用他的对象仍然是a   所以打印的还是tt
+	}
+}
+window.a.fn();	
+//例4
+var name='windowName';
+var a={
+	//name:"tt",
+	fn:function(){
+		console.log(this.name); //undefined
+		//这里面为什么会打印undefined呢 调用函数fn()的对象是a a对象里面并没有对name进行定义所以打印的还是undefined
+		//这个例子还说明了:this永远指向最后调用他的那个对象,最后调用的是a  a中没有这个name属性,也不会继续的去上一层寻找this.name 而是直接输出undefined
+	}
+}
+window.a.fn();	
+//例5
+var name='windowName';
+var a={
+	name:'tt',
+	fn:function(){
+		console.log(this.name);//windowName
+		//为什么打印的不是tt呢 因为虽然将a的对象fn赋值给了变量f 但是并没有调用 因为this永远向最后调用他的那个对象,由于fn()并没有被调用  所以fn() 最后仍然被window调用所以this指向的仍然是window
+	}
+}
+var f=a.fn;
+f();
+//例6
+var name = "windowsName";
+
+function fn() {
+    var name = 'tt';
+    innerFunction();
+    function innerFunction() {
+        console.log(this.name);      // windowsName
+    }
+}
+
+fn();
+
+
+
+
+
+/*
+2--怎么改变this的指向
+	a.使用ES6的箭头函数
+	b.在函数内部使用_this=this
+	c.使用apply,call,bind
+	d.new实例化一个对象
+*/
+
+//例7
+var name='windowName';
+var a={
+	name:"tt",
+	function1:function(){
+		console.log(this.name)
+	},
+	function2:function(){
+		setTimeout(function(){
+			this.function1()
+		},100);
+	}
+}
+a.function2();//this.function1 is not a function 
+//在不使用箭头函数的情况下是会报错的  因为最后调用的 setTimeout 的对象是window,但是在window中并没有function1函数
+
+
+
+
+
+/*
+a.箭头函数:
+	ES6中的箭头函数是可以避免ES5中使用this的坑的. 箭头函数的this始终指向函数定义时的this,而非执行时.   箭头函数需要记住这句话"箭头函数中没有this绑定,必须通过查找作用域链来决定其值,如果箭头函数被非箭头函数包含,则this绑定的最近一层非箭头函数的this，否则,this为undefined"
+*/
+//例8
+var name='windowName';
+var a={
+	name:"tt",
+	function1:function(){
+		console.log(this.name)
+	},
+	function2:function(){
+		setTimeout(()=>{
+			this.function1()
+		},100);
+	}
+}
+a.function2();//tt
+/*
+b.在函数内部使用_this=this
+	如果不使用ES6,那么这种方式应该是最简单的不会出错的方式了,我们先将调用这个函数的对象保存在变量_this中,然后在函数中使用这个_this,这样_this就不会改变了.
+*/
+//例9
+var name='windowName';
+var a={
+	name:"tt",
+	function1:function(){
+		console.log(this.name)
+	},
+	function2:function(){
+		var _this=this;
+		setTimeout(function(){
+			_this.function1()
+		},100);
+	}
+}
+a.function2();//tt
+/*
+	在这个例子中,在function2中,首先设置 var _this=this;这里的this是调用function2的对象a,为了防止在function2中的setTimeout被window调用而导致的在setTimeout中的this为window.我们将this(指向变量a)赋值给了一个变量 _this ,这样,在function2中我们使用_this就是指向对象a了
+*/
+
+
+
+/*
+c.使用apply  call bind
+*/
+
+// 例10 使用apply    
+var a={
+	name:"tt",
+	function1:function(){
+		console.log(this.name)
+	},
+	function2:function(){
+		setTimeout(function(){
+			this.function1()
+		}.apply(a),100);
+	}
+}
+a.function2();//tt
+
+
+//例11   使用call
+var a={
+	name:"tt",
+	function1:function(){
+		console.log(this.name)
+	},
+	function2:function(){
+		setTimeout(function(){
+			this.function1()
+		}.call(a),100);
+	}
+}
+a.function2();//tt
+
+//例12   使用bind
+
+var a={
+	name:"tt",
+	function1:function(){
+		console.log(this.name)
+	},
+	function2:function(){
+		setTimeout(function(){
+			this.function1()
+		}.bind(a)(),100);
+	}
+}
+a.function2();//tt
+
+
+
+
+//apply  call  bind  的区别
+
+
+//apply() 方法调用一个函数, 其具有一个指定的this值，以及作为一个数组（或类似数组的对象）提供的参数  fun.apply(thisArg,[argsArry])
+
+/*
+	thisArg：在 fun 函数运行时指定的 this 值。需要注意的是，指定的 this 值并不一定是该函数执行时真正的 this 值，如果这个函数处于非严格模式下，则指定为 null 或 undefined 时会自动指向全局对象（浏览器中就是window对象），同时值为原始值（数字，字符串，布尔值）的 this 会指向该原始值的自动包装对象。
+	argsArray：一个数组或者类数组对象，其中的数组元素将作为单独的参数传给 fun 函数。如果该参数的值为null 或 undefined，则表示不需要传入任何参数。从ECMAScript 5 开始可以使用类数组对象。浏览器兼容性请参阅本文底部内容。
+*/
+
+//call的语法  fun.call(thisArg,[,arg1[,arg2[, ...]]])
+
+//所以 apply 和 call 的区别是 call 方法接受的是若干个参数列表，而 apply 接收的是一个包含多个参数的数组。
+
+//例13
+var a={
+	name:"tt",
+	fn:function(a,b){
+		console.log(a+b)
+	}
+}
+var b=a.fn;
+b.apply(a,[1,2]);//3
+
+
+//例14
+var a={
+	name:"tt",
+	fn:function(a,b){
+		console.log(a+b)
+	}
+}
+var b=a.fn;
+b.call(a,1,2);//3
+
+
+//例15
+var a={
+	name:"tt",
+	fn:function(a,b){
+		console.log(a+b)
+	}
+}
+var b=a.fn;
+b.bind(a,1,2);//我们发现并没有输出结果
+//bind()方法创建一个新的函数, 当被调用时，将其this关键字设置为提供的值，在调用新函数时，在任何提供之前提供一个给定的参数序列。所以我们可以看出,bind是创建一个新的函数,我们必须要手动去调用
+//例16
+var a={
+	name:"tt",
+	fn:function(a,b){
+		console.log(a+b)
+	}
+}
+var b=a.fn;
+b.bind(a,1,2)();//3
+
+
+//3--js中函数的调用
+
+</script>
